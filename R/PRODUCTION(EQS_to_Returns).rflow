@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rflow [
+<!ENTITY lt "&#38;#60;">
+<!ENTITY gt "&#62;">
+<!ENTITY amp "&#38;#38;">
+<!ENTITY apos "&#39;">
+<!ENTITY quot "&#34;">
+]>
+<rflow>
+	<graph version="0.3" width="1422" height="897" locationtype="a" offsetx="0" offsety="-46">
+		<setting>
+			<entry key="OUTPUT_DIRECTORY"></entry>
+			<entry key="SAVE_CACHE">false</entry>
+			<entry key="FONT_SCREEN">monospace</entry>
+			<entry key="TEXT_ENCODING">windows-1252</entry>
+			<entry key="LOAD_CACHE">false</entry>
+			<entry key="IGNORE_ERROR">false</entry>
+			<entry key="SAVE_WORKSPACE"></entry>
+			<entry key="OUTPUT_REPORT">true</entry>
+			<entry key="RUN_TYPE">2</entry>
+			<entry key="OUTPUT_ITEMS">script</entry>
+			<entry key="USE_GRID">true</entry>
+			<entry key="REPORT_TYPES">pdf,html</entry>
+			<entry key="FOLDER">FLOW_EQS_to_Returns</entry>
+			<entry key="GRID_DISTANCE2">10</entry>
+			<entry key="IMAGE_SIZE">480,480</entry>
+			<entry key="FONT_OTHER">sans-serif</entry>
+		</setting>
+		<node id="0" x="300" y="90">
+			<command># EQS ============
+
+stock.universe&lt;-&quot;JALSH&quot;
+eqs.environment&lt;-&quot;PRODUCTION&quot;
+
+
+# ============= Prepare ==============================
+data.root&lt;-&quot;C:/400_QuantsSVN/Data/CSV/FTST/&quot;
+enviro.verse&lt;-paste(eqs.environment,&quot;(&quot;,stock.universe,&quot;)&quot;,sep=&quot;&quot;)
+EQS.foldername&lt;-stock.universe
+EQS.screenname&lt;-enviro.verse
+EQS.screentype&lt;-&quot;PRIVATE&quot;
+BATCH_SIZE&lt;-50
+
+path.to.dataset&lt;-paste(data.root,&quot;Universe=&quot;,stock.universe,&quot;/Fields=&quot;,enviro.verse,&quot;/Dataset=&quot;,sep=&quot;&quot;)
+folder.target&lt;-paste(path.to.dataset,&quot;EQS/&quot;,sep=&quot;&quot;)
+
+
+# ============= Execution ==============================
+source(&apos;C:/400_QuantsSVN/Operators/FactoR/EQS_to_CSV/EQS_to_CSV.R&apos;)
+
+EQS_to_CSV(cDates =cDates,
+          folder.target=folder.target,
+          EQS.foldername=EQS.foldername,
+          EQS.screenname=EQS.screenname,
+          EQS.screentype=EQS.screentype,
+          BATCH_SIZE=BATCH_SIZE)
+
+
+</command>
+			<property/>
+			<option type="com.ef_prime.rflow.node.base.FreeNodeModel"/>
+		</node>
+		<node id="1" x="430" y="90">
+			<command># JALSH ReturnEnrich ====================================
+stock.universe&lt;-&quot;JALSH&quot;
+eqs.environment&lt;-&quot;PRODUCTION&quot;
+  
+Pad.NA.Ticker&lt;-&quot;TOP40 Index&quot;
+TRR.CCY&lt;-&quot;PRC&quot;          
+TRR.DVD&lt;-&quot;2&quot;     
+BATCH_SIZE&lt;-50
+
+dataset.source&lt;-&quot;EQS&quot;
+dataset.target&lt;-&quot;ReturnEnriched&quot;
+
+
+
+
+
+
+# ============= Prepare ==============================
+data.root&lt;-&quot;C:/400_QuantsSVN/Data/CSV/FTST/&quot;
+enviro.verse&lt;-paste(eqs.environment,&quot;(&quot;,stock.universe,&quot;)&quot;,sep=&quot;&quot;)
+
+path.to.dataset&lt;-paste(data.root,&quot;Universe=&quot;,stock.universe,&quot;/Fields=&quot;,enviro.verse,&quot;/Dataset=&quot;,sep=&quot;&quot;)
+folder.source&lt;-paste(path.to.dataset,&quot;EQS/&quot;,sep=&quot;&quot;)
+folder.target&lt;-paste(path.to.dataset,&quot;ReturnEnriched/&quot;,sep=&quot;&quot;)
+
+if (SAMPLE==&quot;T12M&quot;){
+	lfiles&lt;-list.files(folder.source,pattern = &quot;*.csv&quot;,full.names=TRUE, recursive = FALSE, include.dirs = FALSE)
+  	N&lt;-length(lfiles)
+	STARTFILE&lt;-N-12
+}else{	
+	# Full Refresh
+	STARTFILE&lt;-1
+}
+
+# ============= Execution ==============================
+source(&apos;C:/400_QuantsSVN/Operators/FactoR/ReturnEnrich/ReturnEnrich_Parallel.R&apos;)
+ReturnEnrich_Parallel(dataset.source = dataset.source,
+                      folder.source=folder.source,
+                      dataset.target=dataset.target, 
+                      folder.target=folder.target,
+                      TRR.CCY=TRR.CCY,  
+                      TRR.DVD=TRR.DVD, 
+                      Pad.NA.Ticker=Pad.NA.Ticker,
+                      BATCH_SIZE=BATCH_SIZE,
+                      STARTFILE=STARTFILE)
+
+# ======================== Result ===============================================
+
+# Clear all
+rm(list=ls())
+
+# Clear Console
+cat(&quot;\014&quot;)
+
+print(&quot;Done.&quot;)</command>
+			<property/>
+			<option type="com.ef_prime.rflow.node.base.FreeNodeModel"/>
+		</node>
+		<node id="2" x="300" y="160">
+			<command># EQS ============
+
+stock.universe&lt;-&quot;SPGLOB&quot;
+eqs.environment&lt;-&quot;PRODUCTION&quot;
+
+
+
+# ============= Prepare ==============================
+data.root&lt;-&quot;C:/400_QuantsSVN/Data/CSV/FTST/&quot;
+enviro.verse&lt;-paste(eqs.environment,&quot;(&quot;,stock.universe,&quot;)&quot;,sep=&quot;&quot;)
+EQS.foldername&lt;-stock.universe
+EQS.screenname&lt;-enviro.verse
+EQS.screentype&lt;-&quot;PRIVATE&quot;
+BATCH_SIZE&lt;-50
+
+path.to.dataset&lt;-paste(data.root,&quot;Universe=&quot;,stock.universe,&quot;/Fields=&quot;,enviro.verse,&quot;/Dataset=&quot;,sep=&quot;&quot;)
+folder.target&lt;-paste(path.to.dataset,&quot;EQS/&quot;,sep=&quot;&quot;)
+
+
+# ============= Execution ==============================
+source(&apos;C:/400_QuantsSVN/Operators/FactoR/EQS_to_CSV/EQS_to_CSV.R&apos;)
+
+EQS_to_CSV(cDates =cDates,
+          folder.target=folder.target,
+          EQS.foldername=EQS.foldername,
+          EQS.screenname=EQS.screenname,
+          EQS.screentype=EQS.screentype,
+          BATCH_SIZE=BATCH_SIZE)
+</command>
+			<property/>
+			<option type="com.ef_prime.rflow.node.base.FreeNodeModel"/>
+		</node>
+		<node id="3" x="180" y="90">
+			<command># Dates ==========
+
+
+# T12Month or Full Sample
+SAMPLE&lt;-&quot;T12M&quot;
+
+
+
+
+
+# ============= Execution  ==============================
+eom &lt;- function(date) {
+  # date character string containing POSIXct date
+  date.lt &lt;- as.POSIXlt(date) # add a month, then subtract a day:
+  mon &lt;- date.lt$mon + 2 
+  year &lt;- date.lt$year
+  year &lt;- year + as.integer(mon==13) # if month was December add a year
+  mon[mon==13] &lt;- 1
+  iso = ISOdate(1900+year, mon, 1, hour=0, tz=attr(date,&quot;tz&quot;))
+  result = as.POSIXct(iso) - 86400 # subtract one day
+  result + (as.POSIXlt(iso)$isdst - as.POSIXlt(result)$isdst)*3600
+}
+
+# Generate Date list
+dtNow&lt;-mondate(eom(as.POSIXct( format(Sys.Date(),&quot;%Y%m%d&quot;),format=&quot;%Y%m%d&quot;) ))
+dtEnd&lt;-add(dtNow,-1,units = &quot;months&quot;,forcelastday = TRUE)
+dt12M&lt;-add(dtNow,-1,units = &quot;years&quot;,forcelastday = TRUE)
+
+if (SAMPLE==&quot;T12M&quot;){
+	dtStart&lt;-add(dt12M,-1,units = &quot;months&quot;,forcelastday = TRUE)
+}else{	
+	# Full Refresh
+	dtStart&lt;-mondate.ymd(2002,12,31)	
+}
+
+cDates&lt;-seq.mondate(dtStart, dtEnd)
+cDates&lt;-as.character(as.Date(cDates, &quot;%m/%d/%Y&quot;), &quot;%Y%m%d&quot;) 
+
+
+</command>
+			<property/>
+			<option type="com.ef_prime.rflow.node.base.FreeNodeModel"/>
+		</node>
+		<node id="4" x="410" y="310">
+			<command># HELPER
+
+# ReturnEnrich ====================================
+stock.universe&lt;-&quot;RIY&quot;
+eqs.environment&lt;-&quot;RESEARCH&quot;
+  
+Pad.NA.Ticker&lt;-&quot;SPX Index&quot;
+TRR.CCY&lt;-&quot;PRC&quot;          
+TRR.DVD&lt;-&quot;2&quot;     
+BATCH_SIZE&lt;-10
+STARTFILE&lt;-76
+
+
+dataset.source&lt;-&quot;EQS&quot;
+dataset.target&lt;-&quot;ReturnEnriched&quot;
+
+
+# ============= Prepare ==============================
+data.root&lt;-&quot;C:/400_QuantsSVN/Data/CSV/FTST/&quot;
+enviro.verse&lt;-paste(eqs.environment,&quot;(&quot;,stock.universe,&quot;)&quot;,sep=&quot;&quot;)
+
+path.to.dataset&lt;-paste(data.root,&quot;Universe=&quot;,stock.universe,&quot;/Fields=&quot;,enviro.verse,&quot;/Dataset=&quot;,sep=&quot;&quot;)
+folder.source&lt;-paste(path.to.dataset,&quot;EQS/&quot;,sep=&quot;&quot;)
+folder.target&lt;-paste(path.to.dataset,&quot;ReturnEnriched/&quot;,sep=&quot;&quot;)
+
+# ============= Execution ==============================
+source(&apos;C:/400_QuantsSVN/Operators/FactoR/ReturnEnrich/ReturnEnrich_Parallel.R&apos;)
+ReturnEnrich_Parallel(dataset.source = dataset.source,
+                      folder.source=folder.source,
+                      dataset.target=dataset.target, 
+                      folder.target=folder.target,
+                      TRR.CCY=TRR.CCY,  
+                      TRR.DVD=TRR.DVD, 
+                      Pad.NA.Ticker=Pad.NA.Ticker,
+                      BATCH_SIZE=BATCH_SIZE,
+                      STARTFILE=STARTFILE)
+
+# ======================== Result ===============================================
+
+# Clear all
+rm(list=ls())
+
+# Clear Console
+cat(&quot;\014&quot;)
+
+print(&quot;Done.&quot;)</command>
+			<property/>
+			<option type="com.ef_prime.rflow.node.base.FreeNodeModel"/>
+		</node>
+		<node id="5" x="60" y="90">
+			<command># Initialise ==============================
+
+# Clear all
+rm(list=ls())
+
+# Clear Console
+cat(&quot;\014&quot;)
+
+
+# Clear Charts
+# dev.off()
+
+#Standard libraries to Load
+list.of.packages &lt;- c(&quot;mondate&quot;)
+new.packages &lt;- list.of.packages[!(list.of.packages %in% installed.packages()[,&quot;Package&quot;])]
+if(length(new.packages)&gt;0) install.packages(new.packages)
+for (i in seq_along(list.of.packages) )   {
+  library(list.of.packages[i],character.only = TRUE) 
+}
+
+</command>
+			<property shape="STAR"/>
+			<option type="com.ef_prime.rflow.node.base.FreeNodeModel"/>
+		</node>
+		<node id="6" x="290" y="320">
+			<command># EQS HELPER ============
+
+stock.universe&lt;-&quot;SPGLOB&quot;
+eqs.environment&lt;-&quot;PRODUCTION&quot;
+BATCH_SIZE&lt;-25
+
+# ============= Prepare ==============================
+data.root&lt;-&quot;C:/400_QuantsSVN/Data/CSV/FTST/&quot;
+enviro.verse&lt;-paste(eqs.environment,&quot;(&quot;,stock.universe,&quot;)&quot;,sep=&quot;&quot;)
+EQS.foldername&lt;-stock.universe
+EQS.screenname&lt;-enviro.verse
+EQS.screentype&lt;-&quot;PRIVATE&quot;
+
+path.to.dataset&lt;-paste(data.root,&quot;Universe=&quot;,stock.universe,&quot;/Fields=&quot;,enviro.verse,&quot;/Dataset=&quot;,sep=&quot;&quot;)
+folder.target&lt;-paste(path.to.dataset,&quot;EQS/&quot;,sep=&quot;&quot;)
+
+
+# ============= Execution ==============================
+source(&apos;C:/400_QuantsSVN/Operators/FactoR/EQS_to_CSV/EQS_to_CSV.R&apos;)
+
+EQS_to_CSV(cDates =cDates,
+          folder.target=folder.target,
+          EQS.foldername=EQS.foldername,
+          EQS.screenname=EQS.screenname,
+          EQS.screentype=EQS.screentype,
+          BATCH_SIZE=BATCH_SIZE)
+
+
+# ======================== Result ===============================================
+# Clear all
+rm(list=ls())
+
+# Clear Console
+cat(&quot;\014&quot;)
+
+print(&quot;Done.&quot;)</command>
+			<property/>
+			<option type="com.ef_prime.rflow.node.base.FreeNodeModel"/>
+		</node>
+		<node id="7" x="430" y="160">
+			<command># SPGLOB ReturnEnrich ====================================
+stock.universe&lt;-&quot;SPGLOB&quot;
+eqs.environment&lt;-&quot;PRODUCTION&quot;
+  
+Pad.NA.Ticker&lt;-&quot;SPX Index&quot;
+TRR.CCY&lt;-&quot;PRC&quot;          
+TRR.DVD&lt;-&quot;2&quot;     
+BATCH_SIZE&lt;-5
+
+dataset.source&lt;-&quot;EQS&quot;
+dataset.target&lt;-&quot;ReturnEnriched&quot;
+
+
+# ============= Prepare ==============================
+data.root&lt;-&quot;C:/400_QuantsSVN/Data/CSV/FTST/&quot;
+enviro.verse&lt;-paste(eqs.environment,&quot;(&quot;,stock.universe,&quot;)&quot;,sep=&quot;&quot;)
+
+path.to.dataset&lt;-paste(data.root,&quot;Universe=&quot;,stock.universe,&quot;/Fields=&quot;,enviro.verse,&quot;/Dataset=&quot;,sep=&quot;&quot;)
+folder.source&lt;-paste(path.to.dataset,&quot;EQS/&quot;,sep=&quot;&quot;)
+folder.target&lt;-paste(path.to.dataset,&quot;ReturnEnriched/&quot;,sep=&quot;&quot;)
+
+if (SAMPLE==&quot;T12M&quot;){
+	lfiles&lt;-list.files(folder.source,pattern = &quot;*.csv&quot;,full.names=TRUE, recursive = FALSE, include.dirs = FALSE)
+  	N&lt;-length(lfiles)
+	STARTFILE&lt;-N-12
+}else{	
+	# Full Refresh
+	STARTFILE&lt;-1
+}
+
+# ============= Execution ==============================
+source(&apos;C:/400_QuantsSVN/Operators/FactoR/ReturnEnrich/ReturnEnrich_Parallel.R&apos;)
+ReturnEnrich_Parallel(dataset.source = dataset.source,
+                      folder.source=folder.source,
+                      dataset.target=dataset.target, 
+                      folder.target=folder.target,
+                      TRR.CCY=TRR.CCY,  
+                      TRR.DVD=TRR.DVD, 
+                      Pad.NA.Ticker=Pad.NA.Ticker,
+                      BATCH_SIZE=BATCH_SIZE,
+                      STARTFILE=STARTFILE)
+
+# ======================== Result ===============================================
+
+# Clear all
+rm(list=ls())
+
+# Clear Console
+cat(&quot;\014&quot;)
+
+print(&quot;Done.&quot;)</command>
+			<property/>
+			<option type="com.ef_prime.rflow.node.base.FreeNodeModel"/>
+		</node>
+		<node id="8" x="150" y="320">
+			<command># Dates HELPER==========
+
+dtStart&lt;-mondate.ymd(2007,02,28)
+
+# ============= Execution  ==============================
+eom &lt;- function(date) {
+  # date character string containing POSIXct date
+  date.lt &lt;- as.POSIXlt(date) # add a month, then subtract a day:
+  mon &lt;- date.lt$mon + 2 
+  year &lt;- date.lt$year
+  year &lt;- year + as.integer(mon==13) # if month was December add a year
+  mon[mon==13] &lt;- 1
+  iso = ISOdate(1900+year, mon, 1, hour=0, tz=attr(date,&quot;tz&quot;))
+  result = as.POSIXct(iso) - 86400 # subtract one day
+  result + (as.POSIXlt(iso)$isdst - as.POSIXlt(result)$isdst)*3600
+}
+
+# Generate Date list
+dtNow&lt;-mondate(eom(as.POSIXct( format(Sys.Date(),&quot;%Y%m%d&quot;),format=&quot;%Y%m%d&quot;) ))
+dtEnd&lt;-add(dtNow,-1,units = &quot;months&quot;,forcelastday = TRUE)
+
+cDates&lt;-seq.mondate(dtStart, dtEnd)
+cDates&lt;-as.character(as.Date(cDates, &quot;%m/%d/%Y&quot;), &quot;%Y%m%d&quot;) 
+
+
+</command>
+			<property/>
+			<option type="com.ef_prime.rflow.node.base.FreeNodeModel"/>
+		</node>
+		<edge from="2" to="7"/>
+		<edge from="0" to="1"/>
+		<edge from="5" to="3"/>
+		<edge from="3" to="2"/>
+		<edge from="3" to="0"/>
+	</graph>
+	<task>
+		<taskgroup>
+			<taskproperty>
+				<entry key="title">Task</entry>
+			</taskproperty>
+			<taskentry node="1">
+				<taskproperty>
+					<entry key="title"># JALSH Re...</entry>
+				</taskproperty>
+			</taskentry>
+			<taskentry node="7">
+				<taskproperty>
+					<entry key="title"># AS51 Ret...</entry>
+				</taskproperty>
+			</taskentry>
+		</taskgroup>
+	</task>
+</rflow>
