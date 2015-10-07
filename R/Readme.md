@@ -4,5 +4,5 @@
 
 ### Price to BOok Ratio
 
-The price to book ratio is defines as
+The price to book ratio is defined as
 
