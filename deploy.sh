@@ -6,7 +6,8 @@ rm -rf out || exit 0;
 mkdir out;
 
 # run our compile script, discussed above
-./compile.sh
+# ./compile.sh
+cp C:/temp/index.html C:/csrvermaaktest/out/index.html 
 
 # go to the out directory and create a *new* Git repo
 cd out
