@@ -1,5 +1,5 @@
 script: bash ./deploy.sh
 env:
   global:
-  - GH_REF: github.com/<your name>/<your repo>.git
-  - secure: "<.... encrypted data from above ....>"
+  - GH_REF: github.com/csrvermaak/csrvermaaktest.git
+  - secure: "E0Og2fapWzxfoJyRPVCFBJgo9Sy3R5Tz0inOCUz4FQYnMyoXn1uOFzACdC/Hmn+rqsTfymKxNKe5Ny85uo1RPar4iJaaVIkvUg0cqwCxnZtCoi+HTAhaiGSDx1g0v7nDrDvtRN8HZyq6S1qSNu6wxk7LEZ0XaY9i/EjOUaG06LabDiois3kVePjxpIVEmKF7pRLdkSHkg1QRYstUPkbECXwgWcMvWAj2oYE5T9cMnliHFViwG6rxy3fUO+JhctX10bf8jBXDY7g9lYuzetGKJ/Wtqnovu5ayY7BbL389Cyzrh+dsP5lj6lYrZvtegs/BeyPJA0GxObmxNflCQ6fy2g5TPTNarGdTPhfFxGNbv0c9BWxL4D3AOfHKKDIiHl8UhZLzPOIzMJCny4qoG71YmopE5z+Wl/DnJu6f5JWgOWsmvcFYOcRxZOFxrCiFK1cGVtBG/jmUY6aALMuDBiShs54+3asYjVYyaQpdMf0RH2EooasOeBsb+VEKkShaN9HM4xUeWT4B+wZnOIznJ/HuYQQ3YQFvOSY4MdAfyLMG5e2q0KGubm0ZwsxyelX+QogGdCCcYlRPuYTOBRuNm1Va88n1bahr18IBx9BlPTfATIAQwqMvrHnJImE8G+HIgDUDSd5ZrhiEwQQIZ6mdFXP8LNfSJBVOchcqINkOkfgnB5w="
